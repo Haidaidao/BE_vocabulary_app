@@ -3,14 +3,12 @@ var crypto = require('crypto');
 
 const loginService = async (data) => {
     let result = null
-    console.log(data.password)
     result = await User.findOne({username : data.username})
 
     if(result==null)
         return "Can't find user"
     else {
-        let pass = result.password
-        if(pass === data.password) 
+        if(await result.validatePassword(data.password)) 
             return "Login success"
         else return "Login fail"
     }
@@ -24,17 +22,15 @@ const registerService = async (data) => {
     newUser.password= data.password
 
     let checkUser = await User.findOne({username: newUser.username})
-    console.log(">>>>>>>>>", checkUser)
+    
     if(checkUser==null) {
+        await newUser.setPassword(data.password)
         newUser.save()
         return newUser
     }
     else {
         return null
     }
-          
-
-    
 }
 
 module.exports = {
