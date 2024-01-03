@@ -1,16 +1,30 @@
 const User = require('../model/user') 
 var crypto = require('crypto'); 
+const { 
+    validateEmail
+} = require('../services/valid')
+
 
 const loginService = async (data) => {
+    // let result = null
+    // result = await User.findOne({username : data.username})
+
+    // if(result==null)
+    //     return "Can't find user"
+    // else {
+    //     if(await result.validatePassword(data.password)) 
+    //         return "Login success"
+    //     else return "Login fail"
+    // }
+
     let result = null
     result = await User.findOne({username : data.username})
 
     if(result==null)
-        return "Can't find user"
+        return null
     else {
         if(await result.validatePassword(data.password)) 
-            return "Login success"
-        else return "Login fail"
+            return result
     }
 }
 
@@ -23,7 +37,7 @@ const registerService = async (data) => {
 
     let checkUser = await User.findOne({username: newUser.username})
     
-    if(checkUser==null) {
+    if(checkUser==null && validateEmail(newUser.email)) {
         await newUser.setPassword(data.password)
         newUser.save()
         return newUser
