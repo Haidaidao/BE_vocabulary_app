@@ -1,5 +1,6 @@
 const User = require('../model/user') 
 
+
 const createUserService = async (data) => {
     let result = null
 
@@ -7,7 +8,6 @@ const createUserService = async (data) => {
         return result 
 
     result = await User.create(data)
-    console.log(result)
     return result
 }
 
