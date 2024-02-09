@@ -1,6 +1,7 @@
 const User = require('../model/user') 
 const {
-    createUserService
+    createUserService,
+    updateUserService
 } = require('../services/userServices')
 
 const postCreateUserAPI = async(req, res) => {
@@ -20,6 +21,22 @@ const postCreateUserAPI = async(req, res) => {
     })
 }
 
+const updateUserAPI = async(req,res) => {
+    let result = await updateUserService(req.body)
+
+    if(result == null) 
+        return res.status(400).json({
+            error: 1,
+            msg: "Error when update user"
+        })
+
+    return res.status(200).json({
+        error: 0,
+        data: result
+    })
+}
+
 module.exports = {
-    postCreateUserAPI
+    postCreateUserAPI,
+    updateUserAPI
 }

@@ -44,11 +44,10 @@ const createCourseService = async (data) => {
     return result
 }
 
-const getCourseService = async(data) => {
+const getCourseService = async(id) => {
     let result = null
-
-    if(data == null)
-        result = await Course.find({}).populate("listVocabulary")
+   
+    result = await Course.find({userInfor: id}).populate("listVocabulary")
 
     return result
 }
@@ -70,7 +69,65 @@ const updateCourseService = async (data) => {
 const getVocabularyInCourseService = async(data) => {
     let result = null
     result = await Course.find({_id: data}).populate("listVocabulary")
-    
+    return result
+}
+
+const getQuestionForTest = (temp, numberTest, wordList, words, result) => {
+    temp = wordList.slice(0,numberTest)
+
+    let answerList
+    for(let i =0; i < numberTest; i ++) {
+        answerList =  words[0]['listVocabulary'].filter(function(element) {
+            return element['_id'] != temp[i]['_id'] 
+        })
+        answerList.sort(() => Math.random() - 0.5)
+        let answerListTemp = [temp[i]['mean']]
+        for(let i = 0 ; i < numberTest ; i++)
+            answerListTemp.push(answerList[i]['mean'])
+        let question = {
+            question: temp[i]['name'],
+            answers: answerListTemp,
+            correct: temp[i]['mean']
+        }
+        result.push(question)
+    }
+}
+
+const getVocabularyTestService = async(data) => {
+    let numberTest = 3
+    let result = []
+    let words = null
+    words = await Course.find({_id: data}).populate("listVocabulary")
+    let wordList = words[0]['listVocabulary'].filter(function(element) {
+        return element['complete'] == false;
+    });
+    wordList.sort(() => Math.random() - 0.5) // Random position in list 
+ 
+    let temp
+    if(wordList.length>=numberTest) {
+        getQuestionForTest(temp, numberTest, wordList, words, result)
+    }
+    else {
+        temp = wordList
+        let answerList
+        for(let i =0; i < wordList.length; i ++) {
+            answerList =  words[0]['listVocabulary'].filter(function(element) {
+                return element['_id'] != temp[i]['_id'] 
+            })
+            answerList.sort(() => Math.random() - 0.5)
+            let answerListTemp = [temp[i]['mean']]
+            for(let i = 0 ; i < answerList.length ; i++)
+                answerListTemp.push(answerList[i]['mean'])
+            for(let i = 0 ; i < numberTest - answerList.length ; i++)
+                answerListTemp.push(' ')
+            let question = {
+                question: temp[i]['name'],
+                answers: answerListTemp,
+                correct: temp[i]['mean']
+            }
+            result.push(question)
+        }
+    }
     return result
 }
 
@@ -79,5 +136,6 @@ module.exports = {
     getCourseService,
     deleteCourseService,
     updateCourseService,
-    getVocabularyInCourseService
+    getVocabularyInCourseService,
+    getVocabularyTestService
 }

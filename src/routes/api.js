@@ -1,6 +1,7 @@
 const express = require('express')
 const {
-    postCreateUserAPI
+    postCreateUserAPI,
+    updateUserAPI
 } = require('../controllers/userControllers') 
 
 const {
@@ -19,13 +20,15 @@ const {
     getCourseAPI,
     deleteCourseAPI,
     updateCourseAPI,
-    getVocabularyInCourseAPI
+    getVocabularyInCourseAPI,
+    getVocabularyTestAPI
 } = require('../controllers/courseControllers')
 
 const routerAPI = express.Router()
 
 // User
 routerAPI.post('/users', postCreateUserAPI)
+routerAPI.put('/users', updateUserAPI)
 
 // auth
 routerAPI.post('/auth/register', register)
@@ -39,9 +42,10 @@ routerAPI.put('/vocabulary', updateVocabularyAPI)
 
 // course
 routerAPI.post('/course', createACourseAPI)
-routerAPI.get('/course', getCourseAPI)
+routerAPI.post('/get_course', getCourseAPI)
 routerAPI.delete('/course', deleteCourseAPI)
 routerAPI.put('/course', updateCourseAPI)
 routerAPI.post('/get_vocabulary_course', getVocabularyInCourseAPI)
+routerAPI.post('/get_vocabulary_course_test', getVocabularyTestAPI)
 
 module.exports = routerAPI

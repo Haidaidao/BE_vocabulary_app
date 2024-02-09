@@ -4,7 +4,8 @@ const {
     getCourseService,
     deleteCourseService,
     updateCourseService,
-    getVocabularyInCourseService
+    getVocabularyInCourseService,
+    getVocabularyTestService
 } = require('../services/courseServices')
 
 const createACourseAPI = async(req, res) => {
@@ -26,12 +27,12 @@ const createACourseAPI = async(req, res) => {
 
 const getCourseAPI = async(req,res) => {
     let result = null
-    result = await getCourseService()
+    result = await getCourseService(req.body.id)
 
     if(result==null)
         return res.status(400).json({
             error: 1,
-            msg: "Error when create course"
+            msg: "Error when get course"
         })
     else 
         return res.status(200).json({
@@ -88,10 +89,27 @@ const getVocabularyInCourseAPI = async(req,res) => {
     })
 }
 
+const getVocabularyTestAPI = async(req,res) => {
+    let result = await getVocabularyTestService(req.body.id)
+    if(result == null) {
+        
+        return res.status(400).json({
+            error: 1,
+            msg: "Error when get vocabulary"
+        })
+    }
+    
+    return res.status(200).json({
+        error: 0,
+        data: result 
+    })
+}
+
 module.exports = {
     createACourseAPI,
     getCourseAPI,
     deleteCourseAPI,
     updateCourseAPI,
-    getVocabularyInCourseAPI
+    getVocabularyInCourseAPI,
+    getVocabularyTestAPI 
 }

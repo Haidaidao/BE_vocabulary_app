@@ -13,6 +13,8 @@ const userSchema = new mongoose.Schema({
             required : true
         },
         email: String,
+        nameCourse: String,
+        idCourse: String
     },
     {
         timestamps: true, // createdAt, updatedAt

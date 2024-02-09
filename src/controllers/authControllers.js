@@ -40,7 +40,6 @@ const login = async (req, res) => {
     let user = req.body
 
     let result = await loginService(user)
-
     if(result != null) {
         result = result.toObject()
         delete result.password
