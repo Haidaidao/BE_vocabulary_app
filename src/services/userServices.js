@@ -1,14 +1,27 @@
 const User = require('../model/user') 
-
+const { 
+    validateEmail
+} = require('../services/valid')
 
 const createUserService = async (data) => {
-    let result = null
+    let newUser = new User(); 
+ 
+    newUser.username = data.username, 
+    newUser.email = data.email,
+    newUser.password= data.password
+    newUser.idCourse = data.idCourse
+    newUser.nameCourse = data.nameCourse
 
-    if(data.username == null || data.password == null)
-        return result 
-
-    result = await User.create(data)
-    return result
+    let checkUser = await User.findOne({username: newUser.username})
+    
+    if(checkUser==null && validateEmail(newUser.email)) {
+        await newUser.setPassword(data.password)
+        newUser.save()
+        return newUser
+    }
+    else {
+        return null
+    }
 }
 
 const updateUserService = async (data) => {

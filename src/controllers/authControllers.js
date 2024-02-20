@@ -22,15 +22,15 @@ const register = async (req,res) => {
         }); 
     }
     else {
-        if(validateEmail(user.email))
+        if(!validateEmail(user.email))
             return res.status(400).send({ 
                 error: 1,
-                msg : "Existed username"
+                msg : "Invalid email"
             }); 
         else 
             return res.status(400).send({ 
                 error: 1,
-                msg : "Invalid email"
+                msg : "Existed username"
             }); 
     }
 

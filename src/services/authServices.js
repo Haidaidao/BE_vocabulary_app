@@ -12,16 +12,15 @@ const loginService = async (data) => {
     
     if(result==null)
         return null
-    else {
-        
+    else 
         if(await result.validatePassword(data.password)) 
             return result
-    }
+
 }
 
 const registerService = async (data) => {
     let newUser = new User(); 
-    console.log(newUser)
+ 
     newUser.username = data.username, 
     newUser.email = data.email,
     newUser.password= data.password
