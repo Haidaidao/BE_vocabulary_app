@@ -91,7 +91,7 @@ const getVocabularyInCourseAPI = async(req,res) => {
 
 const getVocabularyTestAPI = async(req,res) => {
     let result = await getVocabularyTestService(req.body.id)
-    if(result == null) {
+    if(result == null || result.length === 0) {
         
         return res.status(400).json({
             error: 1,
