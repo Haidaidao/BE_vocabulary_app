@@ -29,7 +29,7 @@ const getCourseAPI = async(req,res) => {
     let result = null
     result = await getCourseService(req.body.id)
 
-    if(result==null)
+    if(result == null || result.length == 0)
         return res.status(400).json({
             error: 1,
             msg: "Error when get course"
@@ -73,7 +73,7 @@ const updateCourseAPI = async(req,res) => {
 
 const getVocabularyInCourseAPI = async(req,res) => {
     let result = await getVocabularyInCourseService(req.body.id)
-    if(result == null) {
+    if(result == null || result.length == 0) {
         
         return res.status(400).json({
             error: 1,
@@ -91,7 +91,7 @@ const getVocabularyInCourseAPI = async(req,res) => {
 
 const getVocabularyTestAPI = async(req,res) => {
     let result = await getVocabularyTestService(req.body.id)
-    if(result == null) {
+    if(result == null || result.length == 0) {
         
         return res.status(400).json({
             error: 1,
